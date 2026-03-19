@@ -100,7 +100,49 @@ function tinhDiem(){
 
 <br><br>
 
-<button type="button" onclick="tinhDiem()">XEM KẾT QUẢ</button>
+<button type="button" onclick="<script>
+function tinhDiem(){
+    let diem = 0;
+
+    // kiểm tra đã trả lời đủ chưa
+    for(let i=1;i<=16;i++){
+        let cau = document.querySelector('input[name="q'+i+'"]:checked');
+
+        if(!cau){
+            alert("Vui lòng trả lời đầy đủ tất cả 16 câu hỏi trước khi xem kết quả.");
+            return; // dừng ngay
+        }
+
+        if(cau.value=="1"){
+            diem++;
+        }
+    }
+
+    // lưu điểm
+    localStorage.setItem("diemMEPA", diem);
+
+    // hiển thị loading
+    document.body.innerHTML = `
+    <div style="
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        height:100vh;
+        font-size:22px;
+        background: linear-gradient(135deg,#2a7f62,#4fbf9f);
+        color:white;
+        font-family:Arial;
+    ">
+        Đang phân tích kết quả...
+    </div>
+    `;
+
+    // delay 1.5 giây rồi chuyển trang
+    setTimeout(()=>{
+        window.location.href = "ketqua.html";
+    },1500);
+}
+</script>">XEM KẾT QUẢ</button>
 
 </form>
 
