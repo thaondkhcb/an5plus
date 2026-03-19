@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Kết quả</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body class="center">
+
+<div class="card">
+
+<h2>Kết quả của bạn</h2>
+
+<canvas id="gauge" width="260" height="140"></canvas>
+
+<h1 id="score"></h1>
+<p id="level"></p>
+<p id="advice"></p>
+
+<button onclick="restart()">Làm lại</button>
+
+<p class="note">
+Công cụ chỉ mang tính tham khảo, không thay thế tư vấn y tế
+</p>
+
+</div>
+
+<script>
+let score=parseInt(localStorage.getItem("score")||0);
+
+document.getElementById("score").innerText=score+"/16";
+
+let level="",advice="",color="#2ecc71";
+
+if(score<=5){
+level="Mức độ tuân thủ thấp";
+advice="Cần cải thiện chế độ ăn.";
+color="#e74c3c";
+}
+else if(score<=10){
+level="Mức độ trung bình";
+advice="Nên điều chỉnh thêm.";
+color="#f1c40f";
+}
+else{
+level="Mức độ tốt";
+advice="Bạn đang có chế độ ăn hợp lý.";
+color="#2ecc71";
+}
+
+document.getElementById("level").innerText=level;
+document.getElementById("advice").innerText=advice;
+
+// GAUGE
+let c=document.getElementById("gauge");
+let ctx=c.getContext("2d");
+
+let current=0;
+let target=score/16*Math.PI;
+
+function draw(){
+ctx.clearRect(0,0,260,140);
+
+// nền
+ctx.beginPath();
+ctx.arc(130,130,100,Math.PI,0);
+ctx.lineWidth=15;
+ctx.strokeStyle="#eee";
+ctx.stroke();
+
+// màu
+ctx.beginPath();
+ctx.arc(130,130,100,Math.PI,Math.PI-current);
+ctx.strokeStyle=color;
+ctx.stroke();
+
+// kim
+ctx.beginPath();
+ctx.moveTo(130,130);
+ctx.lineTo(
+130+90*Math.cos(Math.PI-current),
+130-90*Math.sin(Math.PI-current)
+);
+ctx.lineWidth=3;
+ctx.strokeStyle="#333";
+ctx.stroke();
+
+if(current<target){
+current+=0.05;
+requestAnimationFrame(draw);
+}
+}
+
+draw();
+
+function restart(){
+window.location.href="index.html";
+}
+</script>
+
+</body>
+</html>
