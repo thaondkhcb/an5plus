@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Kết quả MEPA - ĂN5+</title>
+
+<style>
+body {
+    font-family: Arial;
+    background: #f4f8fb;
+    text-align: center;
+}
+
+.container {
+    max-width: 420px;
+    margin: 40px auto;
+    background: white;
+    padding: 25px;
+    border-radius: 18px;
+}
+
+.needle {
+    position: absolute;
+    width: 4px;
+    height: 110px;
+    background: black;
+    left: 50%;
+    bottom: 20px;
+    transform-origin: bottom;
+    transition: 0.8s;
+}
+
+.score {
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.level {
+    margin-top: 10px;
+    padding: 10px;
+    color: white;
+    border-radius: 8px;
+}
+
+.comment, .suggestion {
+    margin-top: 15px;
+    text-align: left;
+    line-height: 1.5;
+}
+
+.disclaimer {
+    margin-top: 15px;
+    font-size: 13px;
+    color: #666;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>Kết quả MEPA</h2>
+
+<div style="position:relative; width:260px; height:140px; margin:auto;">
+<svg id="gauge" width="260" height="140"></svg>
+<div id="needle" class="needle"></div>
+</div>
+
+<div id="score" class="score"></div>
+<div id="level" class="level"></div>
+
+<div id="comment" class="comment"></div>
+<div id="suggestion" class="suggestion"></div>
+
+<div class="disclaimer">
+Kết quả phản ánh mức độ tuân thủ chế độ ăn kiểu Địa Trung Hải (MEPA). 
+Không thay thế chẩn đoán hoặc tư vấn y khoa.
+</div>
+
+</div>
+
+<script>
+
+// ===== CONFIG =====
+const cx = 130, cy = 120, r = 110;
+
+function getPoint(value){
+    let angle = Math.PI * (value / 16);
+    return {
+        x: cx - r * Math.cos(angle),
+        y: cy - r * Math.sin(angle)
+    };
+}
+
+const svg = document.getElementById("gauge");
+
+// ===== DRAW ARC =====
+function drawArc(start, end, color){
+    let s = getPoint(start);
+    let e = getPoint(end);
+
+    let path = document.createElementNS("http://www.w3.org/2000/svg","path");
+    path.setAttribute("d", `M ${s.x} ${s.y} A ${r} ${r} 0 0 1 ${e.x} ${e.y}`);
+    path.setAttribute("stroke", color);
+    path.setAttribute("stroke-width", "20");
+    path.setAttribute("fill", "none");
+
+    svg.appendChild(path);
+}
+
+// 🔴🟡🟢 CHUẨN
+drawArc(0,5,"#e74c3c");
+drawArc(5,10,"#f1c40f");
+drawArc(10,16,"#2ecc71");
+
+// ===== TICKS =====
+for(let i=0;i<=16;i++){
+
+    let o = getPoint(i);
+    let innerR = (i===0||i===5||i===10||i===16)?85:95;
+
+    let angle = Math.PI*(i/16);
+
+    let inn = {
+        x: cx - innerR*Math.cos(angle),
+        y: cy - innerR*Math.sin(angle)
+    };
+
+    let line = document.createElementNS("http://www.w3.org/2000/svg","line");
+    line.setAttribute("x1",o.x);
+    line.setAttribute("y1",o.y);
+    line.setAttribute("x2",inn.x);
+    line.setAttribute("y2",inn.y);
+    line.setAttribute("stroke","#000");
+    line.setAttribute("stroke-width",(i%5===0)?3:1);
+
+    svg.appendChild(line);
+}
+
+// ===== SCORE =====
+let params = new URLSearchParams(window.location.search);
+let diem = parseInt(params.get("score"));
+
+if(isNaN(diem)){
+    diem = parseInt(localStorage.getItem("diemMEPA"));
+}
+if(isNaN(diem)) diem = 8;
+
+document.getElementById("score").innerText = diem + "/16";
+
+// ===== NEEDLE =====
+let angleDeg = -90 + (diem/16)*180;
+document.getElementById("needle").style.transform =
+    `translateX(-50%) rotate(${angleDeg}deg)`;
+
+// ===== COMMENT + SUGGESTION =====
+let level = document.getElementById("level");
+let comment = document.getElementById("comment");
+let suggestion = document.getElementById("suggestion");
+
+if(diem <= 5){
+    level.innerText = "Tuân thủ thấp";
+    level.style.background = "#e74c3c";
+
+    comment.innerHTML = "<b>Nhận xét:</b> Chế độ ăn hiện tại chưa phù hợp với khuyến nghị dinh dưỡng có lợi cho sức khỏe tim mạch.";
+
+    suggestion.innerHTML = "<b>Gợi ý:</b><ul>\
+    <li>Tăng ít nhất 2–3 khẩu phần rau và trái cây mỗi ngày</li>\
+    <li>Ưu tiên cá, đậu, ngũ cốc nguyên hạt</li>\
+    <li>Hạn chế thịt đỏ, đồ chiên, đồ ngọt</li>\
+    <li>Bắt đầu thay đổi từng bước nhỏ để dễ duy trì</li>\
+    </ul>";
+}
+else if(diem <= 10){
+    level.innerText = "Tuân thủ trung bình";
+    level.style.background = "#f1c40f";
+
+    comment.innerHTML = "<b>Nhận xét:</b> Chế độ ăn có một số yếu tố lành mạnh nhưng chưa ổn định.";
+
+    suggestion.innerHTML = "<b>Gợi ý:</b><ul>\
+    <li>Duy trì các thói quen ăn uống tích cực hiện có</li>\
+    <li>Tăng tần suất sử dụng cá, đậu, dầu thực vật</li>\
+    <li>Giảm dần thực phẩm chế biến và đồ ngọt</li>\
+    <li>Ổn định thói quen ăn uống hằng ngày</li>\
+    </ul>";
+}
+else{
+    level.innerText = "Tuân thủ cao";
+    level.style.background = "#2ecc71";
+
+    comment.innerHTML = "<b>Nhận xét:</b> Chế độ ăn phù hợp với mô hình dinh dưỡng có lợi cho sức khỏe tim mạch.";
+
+    suggestion.innerHTML = "<b>Gợi ý:</b><ul>\
+    <li>Tiếp tục duy trì chế độ ăn hiện tại</li>\
+    <li>Đa dạng hóa thực phẩm lành mạnh</li>\
+    <li>Kết hợp hoạt động thể lực thường xuyên</li>\
+    <li>Duy trì thói quen lâu dài để phòng bệnh</li>\
+    </ul>";
+}
+
+</script>
+
+</body>
+</html>
