@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>ĂN5+ - Khảo sát MEPA</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #f5f7fa;
+  margin: 0;
+}
+
+.container {
+  max-width: 720px;
+  margin: auto;
+  padding: 20px;
+}
+
+h1 {
+  text-align: center;
+  color: #2c3e50;
+}
+
+.desc {
+  text-align: center;
+  color: #666;
+  margin-bottom: 15px;
+}
+
+/* Progress */
+.progress-text {
+  text-align: right;
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+.progress-box {
+  background: #ddd;
+  border-radius: 10px;
+  overflow: hidden;
+  height: 10px;
+  margin-bottom: 20px;
+}
+
+.progress-bar {
+  height: 100%;
+  width: 0%;
+  background: #27ae60;
+  transition: 0.3s;
+}
+
+/* Question */
+.question {
+  background: white;
+  padding: 15px;
+  margin-bottom: 12px;
+  border-radius: 10px;
+  border-left: 5px solid transparent;
+}
+
+.question.unanswered {
+  border-left: 5px solid red;
+  background: #fff5f5;
+}
+
+.options label {
+  margin-right: 20px;
+  cursor: pointer;
+}
+
+/* Button */
+button {
+  width: 100%;
+  padding: 15px;
+  font-size: 16px;
+  border: none;
+  border-radius: 10px;
+  background: #27ae60;
+  color: white;
+  cursor: pointer;
+}
+
+.warning {
+  color: red;
+  text-align: center;
+  margin-bottom: 15px;
+  display: none;
+  font-weight: bold;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+<h1>Khảo sát dinh dưỡng MEPA</h1>
+<div class="desc">Trả lời nhanh 16 câu hỏi (1–2 phút)</div>
+
+<div class="progress-text" id="progressText">0/16 câu</div>
+<div class="progress-box">
+  <div class="progress-bar" id="progressBar"></div>
+</div>
+
+<div class="warning" id="warning">
+⚠️ Vui lòng trả lời đầy đủ 16 câu hỏi
+</div>
+
+<form id="surveyForm">
+
+<!-- 1 -->
+<div class="question">
+<p><b>1. Olive oil</b><br>
+Bạn có sử dụng >2 khẩu phần dầu ô liu mỗi ngày không?</p>
+<div class="options">
+<label><input type="radio" name="q1" value="1"> Có</label>
+<label><input type="radio" name="q1" value="0"> Không</label>
+</div>
+</div>
+
+<!-- 2 -->
+<div class="question">
+<p><b>2. Green leafy vegetables</b><br>
+Bạn có ăn >7 khẩu phần rau lá xanh mỗi tuần không?</p>
+<div class="options">
+<label><input type="radio" name="q2" value="1"> Có</label>
+<label><input type="radio" name="q2" value="0"> Không</label>
+</div>
+</div>
+
+<!-- 3 -->
+<div class="question">
+<p><b>3. Other vegetables</b><br>
+Bạn có ăn >2 khẩu phần rau khác mỗi ngày không?</p>
+<div class="options">
+<label><input type="radio" name="q3" value="1"> Có</label>
+<label><input type="radio" name="q3" value="0"> Không</label>
+</div>
+</div>
+
+<!-- 4 -->
+<div class="question">
+<p><b>4. Berries</b><br>
+Bạn có ăn >2 khẩu phần quả mọng mỗi tuần không?</p>
+<div class="options">
+<label><input type="radio" name="q4" value="1"> Có</label>
+<label><input type="radio" name="q4" value="0"> Không</label>
+</div>
+</div>
+
+<!-- 5 -->
+<div class="question">
+<p><b>5. Other fruit</b><br>
+Bạn có ăn >1 khẩu phần trái cây mỗi ngày không?</p>
+<div class="options">
+<label><input type="radio" name="q5" value="1"> Có</label>
+<label><input type="radio" name="q5" value="0"> Không</label>
+</div>
+</div>
+
+<!-- 6 -->
+<div class="question">
+<p><b>6. Meat</b><br>
+Bạn có ăn &lt;3 khẩu phần thịt đỏ/xúc xích mỗi tuần không?</p>
+<div class="options">
+<label><input type="radio" name="q6" value="1"> Có</label>
+<label><input type="radio" name="q6" value="0"> Không</label>
+</div>
+</div>
+
+<!-- 7 -->
+<div class="question">
+<p><b>7. Fish</b><br>
+Bạn có ăn >1 khẩu phần cá mỗi tuần không?</p>
+<div class="options">
+<label><input type="radio" name="q7" value="1"> Có</label>
+<label><input type="radio" name="q7" value="0"> Không</label>
+</div>
+</div>
+
+<!-- 8 -->
+<div class="question">
+<p><b>8. Chicken</b><br>
+Bạn có ăn &lt;5 khẩu phần thịt gà mỗi tuần không?</p>
+<div class="options">
+<label><input type="radio" name="q8" value="1"> Có</label>
+<label><input type="radio" name="q8" value="0"> Không</label>
+</div>
+</div>
+
+<!-- 9 -->
+<div class="question">
+<p><b>9. Cheese</b><br>
+Bạn có ăn &lt;4 khẩu phần phô mai mỗi tuần không?</p>
+<div class="options">
+<label><input type="radio" name="q9" value="1"> Có</label>
+<label><input type="radio" name="q9" value="0"> Không</label>
+</div>
+</div>
+
+<!-- 10 -->
+<div class="question">
+<p><b>10. Butter/cream</b><br>
+Bạn có ăn &lt;5 khẩu phần bơ/kem mỗi tuần không?</p>
+<div class="options">
+<label><input type="radio" name="q10" value="1"> Có</label>
+<label><input type="radio" name="q10" value="0"> Không</label>
+</div>
+</div>
+
+<!-- 11 -->
+<div class="question">
+<p><b>11. Beans</b><br>
+Bạn có ăn >3 khẩu phần đậu mỗi tuần không?</p>
+<div class="options">
+<label><input type="radio" name="q11" value="1"> Có</label>
+<label><input type="radio" name="q11" value="0"> Không</label>
+</div>
+</div>
+
+<!-- 12 -->
+<div class="question">
+<p><b>12. Whole grains</b><br>
+Bạn có ăn >3 khẩu phần ngũ cốc nguyên hạt mỗi ngày không?</p>
+<div class="options">
+<label><input type="radio" name="q12" value="1"> Có</label>
+<label><input type="radio" name="q12" value="0"> Không</label>
+</div>
+</div>
+
+<!-- 13 -->
+<div class="question">
+<p><b>13. Sweets</b><br>
+Bạn có ăn &lt;4 khẩu phần đồ ngọt mỗi tuần không?</p>
+<div class="options">
+<label><input type="radio" name="q13" value="1"> Có</label>
+<label><input type="radio" name="q13" value="0"> Không</label>
+</div>
+</div>
+
+<!-- 14 -->
+<div class="question">
+<p><b>14. Nuts</b><br>
+Bạn có ăn >4 khẩu phần hạt mỗi tuần không?</p>
+<div class="options">
+<label><input type="radio" name="q14" value="1"> Có</label>
+<label><input type="radio" name="q14" value="0"> Không</label>
+</div>
+</div>
+
+<!-- 15 -->
+<div class="question">
+<p><b>15. Fast food</b><br>
+Bạn có ăn &lt;1 bữa fast food mỗi tuần không?</p>
+<div class="options">
+<label><input type="radio" name="q15" value="1"> Có</label>
+<label><input type="radio" name="q15" value="0"> Không</label>
+</div>
+</div>
+
+<!-- 16 -->
+<div class="question">
+<p><b>16. Alcohol</b><br>
+Bạn có uống ở mức khuyến nghị không?</p>
+<div class="options">
+<label><input type="radio" name="q16" value="1"> Có</label>
+<label><input type="radio" name="q16" value="0"> Không</label>
+</div>
+</div>
+
+<button type="button" onclick="submitForm()">Xem kết quả</button>
+
+</form>
+</div>
+
+<script>
+const total = 16;
+
+function updateProgress() {
+  const answered = document.querySelectorAll('input[type=radio]:checked').length;
+  document.getElementById('progressText').innerText = answered + "/" + total + " câu";
+  document.getElementById('progressBar').style.width = (answered / total * 100) + "%";
+}
+
+document.addEventListener("change", function(e) {
+  if (e.target.type === "radio") updateProgress();
+});
+
+function submitForm() {
+  let questions = document.querySelectorAll(".question");
+  let firstMissing = null;
+
+  questions.forEach(q => {
+    let checked = q.querySelector('input:checked');
+    if (!checked) {
+      q.classList.add("unanswered");
+      if (!firstMissing) firstMissing = q;
+    } else {
+      q.classList.remove("unanswered");
+    }
+  });
+
+  if (firstMissing) {
+    document.getElementById("warning").style.display = "block";
+    firstMissing.scrollIntoView({behavior:"smooth",block:"center"});
+    return;
+  }
+
+  let score = 0;
+  document.querySelectorAll('input:checked').forEach(i => {
+    score += parseInt(i.value);
+  });
+
+  window.location.href = "ketqua.html?score=" + score;
+}
+</script>
+
+</body>
+</html>
